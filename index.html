@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic" rel="stylesheet">
+</head>
+
+<body onload="show()">
+  <div id="title">
+    <h1 id="headline">고양이 월드컵 16강 1/8</h1>
+  </div>
+  <div id="main">
+
+    <div id="leftImg" onclick="leftClick()">
+
+    </div>
+    <div id="rightImg" onclick="rightClick()">
+
+    </div>
+    <h2 id="vsTxt">vs</h2>
+    <div id="ltxt">노르웨이숲</div>
+    <div id="rtxt">라가머핀</div>
+  </div>
+  <script src="./cat.js"></script>
+  <script>
+    var leftImg = document.getElementById('leftImg');
+    var rightImg = document.getElementById('rightImg');
+    var ltxt = document.getElementById('ltxt');
+    var rtxt = document.getElementById('rtxt');
+    var title = document.getElementById('title');
+    var selected = new Array(8);
+    var round = 16;
+    var cnt = 0;
+    var img = 0;
+
+    function shuffle(arr) {
+      if (arr instanceof Array) {
+        var length = arr.length;
+        if (length == 1) return arr;
+
+        var i = length * 2;
+        while (i > 0) {
+          var idx1 = Math.floor(Math.random() * length);
+          var idx2 = Math.floor(Math.random() * length);
+          if (idx1 == idx2) continue;
+          var temp = arr[idx1];
+          arr[idx1] = arr[idx2];
+          arr[idx2] = temp;
+          i--;
+        }
+      } else {
+        alert("No Array Object");
+      }
+      return arr;
+    }
+    shuffle(data);
+
+    function show() {
+      leftImg.style.backgroundImage = `url(${data[img].photo})`;
+      ltxt.innerHTML = data[img].name;
+      img++;
+      rightImg.style.backgroundImage = `url(${data[img].photo})`;
+      rtxt.innerHTML = data[img].name;
+      img++;
+      if (img == (data.length - 1))
+        img--;
+    }
+
+    function leftClick() {
+      if (round == 2)
+        title.innerHTML = `<h1>${data[0].name} 우승!</h1>`;
+      selected[cnt] = data[img - 2];
+      cnt++;
+      repeat();
+    }
+
+    function rightClick() {
+      if (round == 2)
+        title.innerHTML = `<h1>${data[1].name} 우승!</h1>`;
+      selected[cnt] = data[img - 1];
+      cnt++;
+      repeat();
+    }
+
+    function repeat() {
+      if ((cnt) == (round / 2)) {
+        cnt = 0;
+        round /= 2;
+        data = new Array(selected.length);
+        for (i = 0; i < selected.length; i++) {
+          data[i] = selected[i];
+        }
+        selected = new Array(selected.length / 2);
+        data = shuffle(data);
+        img = 0;
+
+      }
+      if (round == 16 || round == 8 || round == 4)
+        title.innerHTML = `<h1>고양이 월드컵 ${round}강 ${cnt + 1}/${round / 2}<h1>`;
+
+      if (round == 2)
+        title.innerHTML = `<h1>고양이 월드컵 결승전</h1>`;
+
+      show();
+    }
+  </script>
+</body>
+
+</html>
